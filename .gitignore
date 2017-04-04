@@ -1,0 +1,5 @@
+# keep all .gitkeep files
+!**/.gitkeep
+
+# OSX
+.DS_Store
