@@ -15,10 +15,10 @@ var (
 
 // User represents an user of the system
 type User struct {
-	ID       int64
-	Name     string
-	Password string
-	Active   bool
+	ID       int64  `xorm:"pk 'id'"`
+	Name     string `xorm:"'username'"`
+	Password string `xorm:"'password'"`
+	Active   bool   `xorm:"'active'"`
 }
 
 // IsValid validates user

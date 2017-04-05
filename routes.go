@@ -8,5 +8,8 @@ import (
 
 // SetRoutes sets the routes for the application
 func SetRoutes(app *iris.Framework, orm *xorm.Engine) {
-	app.Get("/", controllers.Setdb(orm), controllers.Index)
+	app.Get("/users", controllers.Setdb(orm), controllers.ListUser)
+	app.Post("/users", controllers.Setdb(orm), controllers.CreateUser)
+	app.Put("/users/:id", controllers.Setdb(orm), controllers.EditUser)
+	app.Delete("/users/:id", controllers.Setdb(orm), controllers.DeleteUser)
 }

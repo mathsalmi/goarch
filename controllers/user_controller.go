@@ -1,35 +1,79 @@
 package controllers
 
 import (
-	"log"
-	"strconv"
-
 	"github.com/mathsalmi/goarch/model"
 	"gopkg.in/kataras/iris.v6"
 )
 
-// Index shows the index page
-func Index(c *iris.Context) {
+// ListUser shows users
+func ListUser(c *iris.Context) {
+	orm := Getdb(c)
+
+	var users []model.User
+
+	err := orm.Find(&users)
+	if err != nil {
+		c.JSON(iris.StatusInternalServerError, nil)
+		return
+	}
+	c.JSON(iris.StatusOK, users)
+}
+
+// CreateUser creates user
+func CreateUser(c *iris.Context) {
+	u := &model.User{}
+	err := c.ReadJSON(u)
+	if err != nil || u.IsValid() != nil {
+		c.JSON(iris.StatusNotAcceptable, nil)
+		return
+	}
 
 	orm := Getdb(c)
-	results, err := orm.Query(`select * from user`)
+	_, err = orm.Insert(u)
 	if err != nil {
-		log.Fatalln("Error on fetching users: %v", err)
+		c.JSON(iris.StatusNotFound, nil)
+		return
+	}
+	c.JSON(iris.StatusOK, nil)
+}
+
+// EditUser edits user
+func EditUser(c *iris.Context) {
+	id, err := c.ParamInt("id")
+	if err != nil {
+		c.JSON(iris.StatusBadRequest, nil)
+		return
 	}
 
-	users := []*model.User{}
-
-	for _, result := range results {
-		id, _ := strconv.ParseInt(string(result["id"]), 10, 64)
-		active, _ := strconv.ParseBool(string(result["active"]))
-
-		users = append(users, &model.User{
-			ID:       id,
-			Name:     string(result["username"]),
-			Password: string(result["password"]),
-			Active:   active,
-		})
+	u := &model.User{}
+	err = c.ReadJSON(u)
+	if err != nil || u.IsValid() != nil {
+		c.JSON(iris.StatusNotAcceptable, nil)
+		return
 	}
 
-	c.JSON(iris.StatusOK, users)
+	orm := Getdb(c)
+	_, err = orm.Where("id = ?", id).Update(*u)
+	if err != nil {
+		c.JSON(iris.StatusNotFound, nil)
+		return
+	}
+	c.JSON(iris.StatusOK, nil)
+}
+
+// DeleteUser delete user
+func DeleteUser(c *iris.Context) {
+	id, err := c.ParamInt("id")
+	if err != nil {
+		c.JSON(iris.StatusNotFound, nil)
+		return
+	}
+
+	orm := Getdb(c)
+	affected, err := orm.Id(id).Delete(&model.User{})
+	if affected == 0 || err != nil {
+		c.JSON(iris.StatusNotFound, nil)
+		return
+	}
+	c.JSON(iris.StatusOK, nil)
 }
