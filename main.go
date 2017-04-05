@@ -13,15 +13,11 @@ import (
 	"github.com/go-xorm/xorm"
 )
 
-var (
-	port = env("PORT", "8090")
-)
-
 func main() {
 	app := iris.New()
 
 	// start database
-	orm, err := xorm.NewEngine("mysql", "root:root@/express?charset=utf8")
+	orm, err := xorm.NewEngine(dbtype, dburl)
 	if err != nil {
 		log.Fatalln("Cannot connect to database: %v", err)
 	}
