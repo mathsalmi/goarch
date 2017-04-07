@@ -1,4 +1,4 @@
-package controllers
+package util
 
 import (
 	"github.com/go-xorm/xorm"

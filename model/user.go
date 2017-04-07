@@ -1,6 +1,10 @@
 package model
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/mathsalmi/goarch/util"
+)
 
 var (
 	// ErrNameRequired enforces user to have a name
@@ -22,19 +26,19 @@ type User struct {
 }
 
 // IsValid validates user
-func (u *User) IsValid() []error {
-	var err []error
+func (u *User) IsValid() error {
+	err := util.NewError()
 
 	if len(u.Name) == 0 {
-		err = append(err, ErrNameRequired)
+		err.Append(ErrNameRequired)
 	}
 
 	if len(u.Password) == 0 {
-		err = append(err, ErrPasswordRequired)
+		err.Append(ErrPasswordRequired)
 	}
 
 	if len(u.Password) < 3 {
-		err = append(err, ErrPasswordLen)
+		err.Append(ErrPasswordLen)
 	}
 
 	return err

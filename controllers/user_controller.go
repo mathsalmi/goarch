@@ -2,12 +2,13 @@ package controllers
 
 import (
 	"github.com/mathsalmi/goarch/model"
+	"github.com/mathsalmi/goarch/util"
 	"gopkg.in/kataras/iris.v6"
 )
 
 // ListUser shows users
 func ListUser(c *iris.Context) {
-	orm := Getdb(c)
+	orm := util.Getdb(c)
 
 	var users []model.User
 
@@ -28,7 +29,7 @@ func CreateUser(c *iris.Context) {
 		return
 	}
 
-	orm := Getdb(c)
+	orm := util.Getdb(c)
 	_, err = orm.Insert(u)
 	if err != nil {
 		c.JSON(iris.StatusNotFound, nil)
@@ -52,7 +53,7 @@ func EditUser(c *iris.Context) {
 		return
 	}
 
-	orm := Getdb(c)
+	orm := util.Getdb(c)
 	_, err = orm.Where("id = ?", id).Update(*u)
 	if err != nil {
 		c.JSON(iris.StatusNotFound, nil)
@@ -69,7 +70,7 @@ func DeleteUser(c *iris.Context) {
 		return
 	}
 
-	orm := Getdb(c)
+	orm := util.Getdb(c)
 	affected, err := orm.Id(id).Delete(&model.User{})
 	if affected == 0 || err != nil {
 		c.JSON(iris.StatusNotFound, nil)
