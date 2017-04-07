@@ -22,18 +22,20 @@ type User struct {
 }
 
 // IsValid validates user
-func (u *User) IsValid() error {
+func (u *User) IsValid() []error {
+	var err []error
+
 	if len(u.Name) == 0 {
-		return ErrNameRequired
+		err = append(err, ErrNameRequired)
 	}
 
 	if len(u.Password) == 0 {
-		return ErrPasswordRequired
+		err = append(err, ErrPasswordRequired)
 	}
 
 	if len(u.Password) < 3 {
-		return ErrPasswordLen
+		err = append(err, ErrPasswordLen)
 	}
 
-	return nil
+	return err
 }
