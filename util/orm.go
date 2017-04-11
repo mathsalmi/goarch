@@ -1,19 +1,16 @@
 package util
 
-import (
-	"github.com/go-xorm/xorm"
-	"gopkg.in/kataras/iris.v6"
-)
+import "github.com/go-xorm/xorm"
 
-// Setdb puts the connection with db on the context
-func Setdb(orm *xorm.Engine) iris.HandlerFunc {
-	return func(ctx *iris.Context) {
-		ctx.Set("orm", orm)
-		ctx.Next()
-	}
+// instance holds an instance of the XORM
+var instance *xorm.Engine
+
+// SetDb sets an instance of the XORM in the internal guard
+func SetDb(orm *xorm.Engine) {
+	instance = orm
 }
 
-// Getdb returns the connection with db
-func Getdb(ctx *iris.Context) *xorm.Engine { // TODO add an error
-	return ctx.Get("orm").(*xorm.Engine)
+// GetDb returns the XORM instance
+func GetDb() *xorm.Engine {
+	return instance
 }

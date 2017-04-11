@@ -11,16 +11,20 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
+	"github.com/mathsalmi/goarch/util"
 )
 
-func main() {
-	app := iris.New()
-
+func init() {
 	// start database
 	orm, err := xorm.NewEngine(dbtype, dburl)
 	if err != nil {
 		log.Fatalln("Cannot connect to database: %v", err)
 	}
+	util.SetDb(orm)
+}
+
+func main() {
+	app := iris.New()
 
 	app.Adapt(
 		// enable debug logger
@@ -34,7 +38,7 @@ func main() {
 	)
 
 	// add routes
-	SetRoutes(app, orm)
+	SetRoutes(app)
 
 	// start the app
 	app.Listen(port)

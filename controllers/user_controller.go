@@ -8,7 +8,7 @@ import (
 
 // ListUser shows users
 func ListUser(c *iris.Context) {
-	orm := util.Getdb(c)
+	orm := util.GetDb()
 
 	var users []model.User
 
@@ -33,7 +33,7 @@ func CreateUser(c *iris.Context) {
 		return
 	}
 
-	orm := util.Getdb(c)
+	orm := util.GetDb()
 	_, err = orm.Insert(u)
 	if err != nil {
 		c.JSON(iris.StatusNotFound, util.NewError(err))
@@ -61,7 +61,7 @@ func EditUser(c *iris.Context) {
 		return
 	}
 
-	orm := util.Getdb(c)
+	orm := util.GetDb()
 	_, err = orm.Where("id = ?", id).Update(*u)
 	if err != nil {
 		c.JSON(iris.StatusNotFound, util.NewError(err))
@@ -78,7 +78,7 @@ func DeleteUser(c *iris.Context) {
 		return
 	}
 
-	orm := util.Getdb(c)
+	orm := util.GetDb()
 	affected, err := orm.Id(id).Delete(&model.User{})
 	if err != nil {
 		c.JSON(iris.StatusNotFound, util.NewError(err))
