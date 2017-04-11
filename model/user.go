@@ -6,15 +6,12 @@ import (
 	"github.com/mathsalmi/goarch/util"
 )
 
+// Errors
 var (
-	// ErrNameRequired enforces user to have a name
-	ErrNameRequired = errors.New("Name is required")
-
-	// ErrPasswordRequired enforces user to have a password
+	ErrNameRequired     = errors.New("Name is required")
 	ErrPasswordRequired = errors.New("Password is required")
-
-	// ErrPasswordLen enforces password length to be at least 3 chars
-	ErrPasswordLen = errors.New("Password must be at least 3 chars")
+	ErrPasswordLen      = errors.New("Password must be at least 3 chars")
+	ErrUserNotFound     = errors.New(`User could not be found`)
 )
 
 // User represents an user of the system
@@ -26,7 +23,7 @@ type User struct {
 }
 
 // IsValid validates user
-func (u *User) IsValid() error {
+func (u *User) IsValid() *util.AppError {
 	err := util.NewError()
 
 	if len(u.Name) == 0 {
@@ -41,5 +38,5 @@ func (u *User) IsValid() error {
 		err.Append(ErrPasswordLen)
 	}
 
-	return err
+	return err.Value()
 }

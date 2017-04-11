@@ -14,7 +14,7 @@ func ListUser(c *iris.Context) {
 
 	err := orm.Find(&users)
 	if err != nil {
-		c.JSON(iris.StatusInternalServerError, nil)
+		c.JSON(iris.StatusInternalServerError, util.NewError(err))
 		return
 	}
 	c.JSON(iris.StatusOK, users)
@@ -24,15 +24,19 @@ func ListUser(c *iris.Context) {
 func CreateUser(c *iris.Context) {
 	u := &model.User{}
 	err := c.ReadJSON(u)
-	if err != nil || u.IsValid() != nil {
-		c.JSON(iris.StatusNotAcceptable, nil)
+	if err != nil {
+		c.JSON(iris.StatusNotAcceptable, util.NewError(err))
+		return
+	}
+	if valid := u.IsValid(); valid != nil {
+		c.JSON(iris.StatusNotAcceptable, valid)
 		return
 	}
 
 	orm := util.Getdb(c)
 	_, err = orm.Insert(u)
 	if err != nil {
-		c.JSON(iris.StatusNotFound, nil)
+		c.JSON(iris.StatusNotFound, util.NewError(err))
 		return
 	}
 	c.JSON(iris.StatusOK, nil)
@@ -42,21 +46,25 @@ func CreateUser(c *iris.Context) {
 func EditUser(c *iris.Context) {
 	id, err := c.ParamInt("id")
 	if err != nil {
-		c.JSON(iris.StatusBadRequest, nil)
+		c.JSON(iris.StatusBadRequest, util.NewError(err))
 		return
 	}
 
 	u := &model.User{}
 	err = c.ReadJSON(u)
-	if err != nil || u.IsValid() != nil {
-		c.JSON(iris.StatusNotAcceptable, nil)
+	if err != nil {
+		c.JSON(iris.StatusNotAcceptable, util.NewError(err))
+		return
+	}
+	if valid := u.IsValid(); valid != nil {
+		c.JSON(iris.StatusNotAcceptable, valid)
 		return
 	}
 
 	orm := util.Getdb(c)
 	_, err = orm.Where("id = ?", id).Update(*u)
 	if err != nil {
-		c.JSON(iris.StatusNotFound, nil)
+		c.JSON(iris.StatusNotFound, util.NewError(err))
 		return
 	}
 	c.JSON(iris.StatusOK, nil)
@@ -66,15 +74,20 @@ func EditUser(c *iris.Context) {
 func DeleteUser(c *iris.Context) {
 	id, err := c.ParamInt("id")
 	if err != nil {
-		c.JSON(iris.StatusNotFound, nil)
+		c.JSON(iris.StatusNotFound, util.NewError(err))
 		return
 	}
 
 	orm := util.Getdb(c)
 	affected, err := orm.Id(id).Delete(&model.User{})
-	if affected == 0 || err != nil {
-		c.JSON(iris.StatusNotFound, nil)
+	if err != nil {
+		c.JSON(iris.StatusNotFound, util.NewError(err))
 		return
 	}
+	if affected == 0 {
+		c.JSON(iris.StatusNotFound, util.NewError(model.ErrUserNotFound))
+		return
+	}
+
 	c.JSON(iris.StatusOK, nil)
 }
