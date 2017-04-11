@@ -1,7 +1,9 @@
 package main
 
+import "github.com/mathsalmi/goarch/util"
+
 var (
-	port = env("PORT", "8090")
+	port = util.Env("PORT", "8090")
 
 	dbtype = "mysql"
 	dburl  = "root:root@/express?charset=utf8"

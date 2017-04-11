@@ -2,8 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
-	"strings"
 
 	"gopkg.in/kataras/iris.v6"
 	"gopkg.in/kataras/iris.v6/adaptors/cors"
@@ -42,19 +40,4 @@ func main() {
 
 	// start the app
 	app.Listen(port)
-}
-
-// env returns a OS env var or default value
-func env(key string, defvalue string) string {
-	env := os.Getenv(key)
-
-	if env == "" {
-		env = defvalue
-	}
-
-	if !strings.HasPrefix(env, ":") {
-		env = ":" + env
-	}
-
-	return env
 }
