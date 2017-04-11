@@ -1,9 +1,6 @@
 package util
 
-import (
-	"os"
-	"strings"
-)
+import "os"
 
 // Env returns a OS env var or default value
 func Env(key string, defvalue string) string {
@@ -11,10 +8,6 @@ func Env(key string, defvalue string) string {
 
 	if env == "" {
 		env = defvalue
-	}
-
-	if !strings.HasPrefix(env, ":") {
-		env = ":" + env
 	}
 
 	return env

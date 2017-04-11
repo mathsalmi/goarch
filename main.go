@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"strings"
 
 	"gopkg.in/kataras/iris.v6"
 	"gopkg.in/kataras/iris.v6/adaptors/cors"
@@ -39,5 +40,13 @@ func main() {
 	SetRoutes(app)
 
 	// start the app
-	app.Listen(port)
+	app.Listen(fmtPort(port))
+}
+
+// fmtPort adds : as prefix to port if it has none
+func fmtPort(port string) string {
+	if !strings.HasPrefix(port, ":") {
+		port = ":" + port
+	}
+	return port
 }
