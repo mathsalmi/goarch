@@ -8,9 +8,9 @@ import (
 	"gopkg.in/kataras/iris.v6/adaptors/cors"
 	"gopkg.in/kataras/iris.v6/adaptors/httprouter"
 
+	"./util"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
-	"github.com/mathsalmi/goarch/util"
 )
 
 func init() {

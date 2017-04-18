@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/mathsalmi/goarch/controllers"
+	"./controllers"
 	iris "gopkg.in/kataras/iris.v6"
 )
 

@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/mathsalmi/goarch/model"
-	"github.com/mathsalmi/goarch/util"
+	"../model"
+	"../util"
 	"gopkg.in/kataras/iris.v6"
 )
 

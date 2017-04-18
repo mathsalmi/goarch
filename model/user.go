@@ -3,7 +3,7 @@ package model
 import (
 	"errors"
 
-	"github.com/mathsalmi/goarch/util"
+	"../util"
 )
 
 // Errors

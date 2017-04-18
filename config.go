@@ -1,6 +1,6 @@
 package main
 
-import "github.com/mathsalmi/goarch/util"
+import "./util"
 
 var (
 	port = util.Env("PORT", "8090")
